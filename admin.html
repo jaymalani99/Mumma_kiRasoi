@@ -730,7 +730,7 @@ function renderTodaySales(){
     return '<div class="record-card">'
       +'<div class="record-top"><div><div class="record-main">Order</div><div class="record-sub">'+formatTime(s.created_at)+'</div></div>'
       +'<div style="display:flex;align-items:center;gap:8px;"><span class="record-amount-pos">+₹'+fmt(s.total_revenue)+'</span>'
-      +'<button class="delete-btn'+(isAdmin?" admin-visible":")+'" data-table="mkr_sales" data-id="'+s.id+'" data-label="Order ₹'+fmt(s.total_revenue)+'">🗑</button></div></div>'
+      +'<button class="delete-btn'+(isAdmin?" admin-visible":"")+'" data-table="mkr_sales" data-id="'+s.id+'" data-label="Order ₹'+fmt(s.total_revenue)+'">🗑</button></div></div>'
       +(itemStr?'<div class="record-items">'+itemStr+'</div>':'')
       +'</div>';
   }).join("");
@@ -745,7 +745,7 @@ function renderExpenseHistory(){
       +'<div class="record-top"><div><div class="record-main">'+e.category+(e.note?' <span style="font-weight:400;color:#aaa;font-size:12px;">· '+e.note+'</span>':'')+'</div>'
       +'<div class="record-sub">'+formatTime(e.created_at)+'</div></div>'
       +'<div style="display:flex;align-items:center;gap:8px;"><span class="record-amount-neg">−₹'+fmt(e.amount)+'</span>'
-      +'<button class="delete-btn'+(isAdmin?" admin-visible":")+'" data-table="mkr_expenses" data-id="'+e.id+'" data-label="'+e.category+' ₹'+fmt(e.amount)+'">🗑</button></div></div>'
+      +'<button class="delete-btn'+(isAdmin?" admin-visible":"")+'" data-table="mkr_expenses" data-id="'+e.id+'" data-label="'+e.category+' ₹'+fmt(e.amount)+'">🗑</button></div></div>'
       +'</div>';
   }).join("");
   attachDeleteBtns();
@@ -832,8 +832,7 @@ function exportSpinsCSV(){csvDownload(allSpins.map(function(r){return[r.name,r.p
 function exportSalesCSV(){csvDownload(allSales.map(function(s){return[s.sale_date,s.total_revenue,s.created_at];}),["Date","Revenue","Created"],"mkr-sales.csv");}
 function exportExpensesCSV(){csvDownload(allExpenses.map(function(e){return[e.expense_date,e.category,e.amount,e.note||"",e.created_at];}),["Date","Category","Amount","Note","Created"],"mkr-expenses.csv");}
 function csvDownload(rows,headers,filename){
-  var csv=[headers.join(",")].concat(rows.map(function(r){return r.map(function(v){return'"'+String(v).replace(/"/g,'""')+'"';}).join(",");})).join("
-");
+  var csv=[headers.join(",")].concat(rows.map(function(r){return r.map(function(v){return'"'+String(v).replace(/"/g,'""')+'"';}).join(",");})).join("\n");
   var a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); a.download=filename; a.click();
 }
 
