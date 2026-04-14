@@ -197,8 +197,8 @@ body{font-family:"DM Sans",sans-serif;background:var(--cream);min-height:100vh;p
 .empty-state{text-align:center;padding:28px;color:#aaa;}
 .empty-state span{font-size:28px;display:block;margin-bottom:8px;}
 .loading{text-align:center;padding:24px;color:#aaa;font-size:13px;}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--royal);color:white;padding:11px 22px;border-radius:100px;font-size:13px;z-index:400;transition:transform 0.3s;white-space:nowrap;box-shadow:0 4px 20px rgba(10,25,70,0.3);pointer-events:none;}
-.toast.show{transform:translateX(-50%) translateY(0);}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--royal);color:white;padding:11px 22px;border-radius:100px;font-size:13px;z-index:400;transition:transform 0.3s,opacity 0.3s;white-space:nowrap;box-shadow:0 4px 20px rgba(10,25,70,0.3);pointer-events:none;opacity:0;visibility:hidden;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;visibility:visible;}
 .divider{height:1px;background:var(--cream-warm);margin:12px 0;}
 </style>
 </head>
@@ -853,7 +853,8 @@ async function dbDelete(path){
 function today(){return new Date().toISOString().slice(0,10);}
 function fmt(n){return parseFloat(n||0).toLocaleString("en-IN",{maximumFractionDigits:0});}
 function formatTime(iso){if(!iso)return"—";var d=new Date(iso);return d.toLocaleDateString("en-IN",{day:"2-digit",month:"short"})+" · "+d.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit",hour12:true});}
-function showToast(msg){var t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(function(){t.classList.remove("show");},2500);}
+var toastTimer=null;
+function showToast(msg){var t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove("show");toastTimer=null;},2500);}
 })();
 </script>
 </body>
